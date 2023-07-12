@@ -1,1 +1,1 @@
-# aerosol-prediction
+# ConvLSTM-prediction
