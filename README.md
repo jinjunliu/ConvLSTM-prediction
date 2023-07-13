@@ -13,6 +13,8 @@ Downlowd the dataset from [here](https://downloads.psl.noaa.gov/Datasets/COBE/ss
 - Numpy 1.23.5
 - Matplotlib 3.6.2
 - xarray 2023.6.0
+- netcdf4 1.6.2
+- h5netcdf 1.2.0
 
 See more details in `environment_droplet.yml`. You can create a new environment by running `conda env create -f environment_droplet.yml`.
 
