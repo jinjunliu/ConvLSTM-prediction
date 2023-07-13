@@ -5,6 +5,7 @@ from dataset import load_data, split_data
 from ConvLSTM_pytorch.convlstm import ConvLSTM
 import torch.nn as nn
 
+
 def main():
     # Load data
     sst_data = load_data()  # should return a xr.dataarray of shape (1590, 180, 360)
@@ -13,6 +14,10 @@ def main():
     train_data, test_data = split_data(sst_data)  # should return two torch tensors
     train_data = torch.from_numpy(train_data).float() # convert to torch tensor
     test_data = torch.from_numpy(test_data).float() # convert to torch tensor
+
+    # replace missing values with 0
+    train_data = torch.nan_to_num(train_data, nan=0.0)
+    test_data = torch.nan_to_num(test_data, nan=0.0)
 
     # Create data loaders
     train_dataset = TensorDataset(train_data)
@@ -59,6 +64,29 @@ def main():
 
             # Here you can do something with the predictions, e.g. save them to a file
             print(predicted)
+
+        
+def create_sequences(input_data, tw):
+    inout_seq = []
+    L = len(input_data)
+    for i in range(L-tw):
+        train_seq = input_data[i:i+tw]
+        inout_seq.append(train_seq)
+    return torch.stack(inout_seq)
+
+# Create sequences
+sequence_length = 24  # 2 years
+sst_data = create_sequences(sst_data, sequence_length)
+
+# Split data into training and testing sets
+train_data, test_data = split_data(sst_data)  # should return two torch tensors
+
+# Create data loaders
+train_dataset = TensorDataset(train_data)
+test_dataset = TensorDataset(test_data)
+train_loader = DataLoader(train_dataset, batch_size=10, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=10, shuffle=False)
+
 
 
 if __name__ == "__main__":
