@@ -8,6 +8,8 @@ Downlowd the dataset from [here](https://downloads.psl.noaa.gov/Datasets/COBE/ss
 
 ## Environment
 
+Some necessary packages:
+
 - Python 3.10
 - Pytorch 1.13.1
 - Numpy 1.23.5
