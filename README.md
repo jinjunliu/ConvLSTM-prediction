@@ -4,7 +4,7 @@ This is a simple example of how to use ConvLSTM to predict the next month of sea
 
 ## Dataset
 
-Downlowd the dataset from [here](https://downloads.psl.noaa.gov/Datasets/COBE/sst.mon.mean.nc) and put it to the `data` directory.
+Downlowd the dataset from https://downloads.psl.noaa.gov/Datasets/COBE/sst.mon.mean.nc and put it to the `datas` directory.
 
 ## Environment
 
