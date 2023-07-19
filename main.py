@@ -50,20 +50,21 @@ def main():
     test_dataset = MovingMNISTDataset(config, split='test')
     test_loader = DataLoader(test_dataset, batch_size=config.test_batch_size,
                             num_workers=config.num_workers, shuffle=False, pin_memory=True)
-    train_records, valid_records, test_records = [], [], []
-    for epoch in range(config.epochs):
-        epoch_records = train(config, logger, epoch, model, train_loader, criterion, optimizer)
-        train_records.append(np.mean(epoch_records['loss']))
-        epoch_records = valid(config, logger, epoch, model, valid_loader, criterion)
-        valid_records.append(np.mean(epoch_records['loss']))
-        epoch_records = test(config, logger, epoch, model, test_loader, criterion)
-        test_records.append(np.mean(epoch_records['loss']))
-        plt.plot(range(epoch + 1), train_records, label='train')
-        plt.plot(range(epoch + 1), valid_records, label='valid')
-        plt.plot(range(epoch + 1), test_records, label='test')
-        plt.legend()
-        plt.savefig(os.path.join(config.output_dir, '{}.png'.format(name)))
-        plt.close()
+    print('Train: {}, Valid: {}, Test: {}'.format(train_dataset.datas.shape, valid_dataset.datas.shape, test_dataset.datas.shape))
+    # train_records, valid_records, test_records = [], [], []
+    # for epoch in range(config.epochs):
+    #     epoch_records = train(config, logger, epoch, model, train_loader, criterion, optimizer)
+    #     train_records.append(np.mean(epoch_records['loss']))
+    #     epoch_records = valid(config, logger, epoch, model, valid_loader, criterion)
+    #     valid_records.append(np.mean(epoch_records['loss']))
+    #     epoch_records = test(config, logger, epoch, model, test_loader, criterion)
+    #     test_records.append(np.mean(epoch_records['loss']))
+    #     plt.plot(range(epoch + 1), train_records, label='train')
+    #     plt.plot(range(epoch + 1), valid_records, label='valid')
+    #     plt.plot(range(epoch + 1), test_records, label='test')
+    #     plt.legend()
+    #     plt.savefig(os.path.join(config.output_dir, '{}.png'.format(name)))
+    #     plt.close()
 
 if __name__ == '__main__':
     main()
