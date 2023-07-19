@@ -27,3 +27,5 @@ def split_data(data):
 if __name__ == "__main__":
     data = load_data()
     print(data.shape)
+    print(data.time.values[0])
+    print(data.time.values[-1])
