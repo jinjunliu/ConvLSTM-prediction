@@ -22,4 +22,4 @@ See more details in `environment_droplet.yml`. You can create a new environment 
 
 ## Usage
 
-Run `python main.py` to train the model and predict the next month of SST.
+Run `python main.py --config 3x3_16_3x3_32_3x3_64_nc` to train the model and predict the next month of SST.
