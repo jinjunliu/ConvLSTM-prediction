@@ -8,6 +8,7 @@ from __future__ import print_function
 import os
 import numpy as np
 from utils.dataset import MovingMNISTDataset
+from utils.dataset_nc import NcDataset
 from networks.ConvLSTM import ConvLSTM
 import torch
 from torch.utils.data import DataLoader
@@ -25,7 +26,7 @@ import matplotlib.pyplot as plt
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='3x3_16_3x3_32_3x3_64')
+    parser.add_argument('--config', type=str, default='3x3_16_3x3_32_3x3_64_nc')
     args = parser.parse_args()
     return args
 
@@ -34,37 +35,42 @@ def main():
     name = args.config
     if name == '3x3_16_3x3_32_3x3_64': from configs.config_3x3_16_3x3_32_3x3_64 import config
     elif name == '3x3_32_3x3_64_3x3_128': from configs.config_3x3_32_3x3_64_3x3_128 import config
+    elif name == '3x3_16_3x3_32_3x3_64_nc': from configs.config_3x3_16_3x3_32_3x3_64_nc import config
+    else: raise ValueError('Invalid config name: {}'.format(name))
     logger = build_logging(config)
     model = ConvLSTM(config).to(config.device)
     #criterion = CrossEntropyLoss().to(config.device)
-    #criterion = torch.nn.MSELoss().to(config.device)
-    criterion = BinaryDiceLoss().to(config.device)
+    criterion = torch.nn.MSELoss().to(config.device) # important: use MSE loss because the output is a float number
+    # criterion = BinaryDiceLoss().to(config.device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
-    train_dataset = MovingMNISTDataset(config, split='train')
+    train_dataset = NcDataset(config, split='train')
     train_loader = DataLoader(train_dataset, batch_size=config.train_batch_size,
                             num_workers=config.num_workers, shuffle=True, pin_memory=True)
-    valid_dataset = MovingMNISTDataset(config, split='valid')
+    valid_dataset = NcDataset(config, split='valid')
     valid_loader = DataLoader(valid_dataset, batch_size=config.valid_batch_size,
                             num_workers=config.num_workers, shuffle=False, pin_memory=True)
-    test_dataset = MovingMNISTDataset(config, split='test')
+    test_dataset = NcDataset(config, split='test')
     test_loader = DataLoader(test_dataset, batch_size=config.test_batch_size,
                             num_workers=config.num_workers, shuffle=False, pin_memory=True)
-    print('Train: {}, Valid: {}, Test: {}'.format(train_dataset.datas.shape, valid_dataset.datas.shape, test_dataset.datas.shape))
-    # train_records, valid_records, test_records = [], [], []
-    # for epoch in range(config.epochs):
-    #     epoch_records = train(config, logger, epoch, model, train_loader, criterion, optimizer)
-    #     train_records.append(np.mean(epoch_records['loss']))
-    #     epoch_records = valid(config, logger, epoch, model, valid_loader, criterion)
-    #     valid_records.append(np.mean(epoch_records['loss']))
-    #     epoch_records = test(config, logger, epoch, model, test_loader, criterion)
-    #     test_records.append(np.mean(epoch_records['loss']))
-    #     plt.plot(range(epoch + 1), train_records, label='train')
-    #     plt.plot(range(epoch + 1), valid_records, label='valid')
-    #     plt.plot(range(epoch + 1), test_records, label='test')
-    #     plt.legend()
-    #     plt.savefig(os.path.join(config.output_dir, '{}.png'.format(name)))
-    #     plt.close()
+    # print train loader size
+    # for i, (inputs, targets) in enumerate(train_loader):
+    #     print(inputs.shape, targets.shape)
+    #     break
+    train_records, valid_records, test_records = [], [], []
+    for epoch in range(config.epochs):
+        epoch_records = train(config, logger, epoch, model, train_loader, criterion, optimizer)
+        train_records.append(np.mean(epoch_records['loss']))
+        epoch_records = valid(config, logger, epoch, model, valid_loader, criterion)
+        valid_records.append(np.mean(epoch_records['loss']))
+        epoch_records = test(config, logger, epoch, model, test_loader, criterion)
+        test_records.append(np.mean(epoch_records['loss']))
+        plt.plot(range(epoch + 1), train_records, label='train')
+        plt.plot(range(epoch + 1), valid_records, label='valid')
+        plt.plot(range(epoch + 1), test_records, label='test')
+        plt.legend()
+        plt.savefig(os.path.join(config.output_dir, '{}.png'.format(name)))
+        plt.close()
 
 if __name__ == '__main__':
     main()
