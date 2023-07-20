@@ -17,7 +17,7 @@ def train(config, logger, epoch, model, train_loader, criterion, optimizer):
     epoch_records = {'loss': []}
     num_batchs = len(train_loader)
     for batch_idx, (inputs, targets) in enumerate(train_loader):
-        print(inputs.max())
+        # print(inputs.max())
         inputs = inputs.float().to(config.device)
         targets = targets.float().to(config.device)
         outputs = model(inputs)
