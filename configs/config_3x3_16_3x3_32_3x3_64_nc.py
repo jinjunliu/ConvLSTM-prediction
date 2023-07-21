@@ -32,8 +32,8 @@ class Config:
     num_frames_input = 12
     num_frames_output = 12
     input_size = (64, 64)
-    display = 12
-    draw = 12
+    display = 2
+    draw = 2
     # train_dataset = (0, 1000)
     # valid_dataset = (1000, 1200)
     # test_dataset = (1200, 1590)
