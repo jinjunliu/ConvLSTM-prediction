@@ -4,16 +4,15 @@ from torch.utils.data import Dataset
 import torch
 
 
-def load_nc_data():
+def load_nc_data(config):
     """load nc data and select the region of interest
     
     Returns:
         data: a xr.dataarray of shape (1590, 64, 64)
     """
-    data_path = "./datas"
-    file_name = "sst.mon.mean.nc"
-    var_name = "sst"
-    with xr.open_dataset(data_path + "/" + file_name) as data:
+    data_file = config.data_file
+    var_name = config.var_name
+    with xr.open_dataset(data_file) as data:
         data = data[var_name]
     # reverse the latitude dimension to make it increasing
     data = data.reindex(lat=list(reversed(data.lat)))
@@ -54,7 +53,7 @@ def split_data(data, split='train'):
 class NcDataset(Dataset):
     def __init__(self, config, split='train'):
         super().__init__()
-        self.datas = load_nc_data()
+        self.datas = load_nc_data(config)
         self.input_size = config.input_size
         self.num_frames_input = config.num_frames_input
         self.num_frames_output = config.num_frames_output
@@ -81,7 +80,8 @@ class NcDataset(Dataset):
 
 
 if __name__ == "__main__":
-    data = load_nc_data()
+    from configs.config_3x3_16_3x3_32_3x3_64_nc import config
+    data = load_nc_data(config)
     print(data.shape)
     print(data.time.values[0])
     print(data.time.values[-1])
