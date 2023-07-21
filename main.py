@@ -42,7 +42,7 @@ def main():
     #criterion = CrossEntropyLoss().to(config.device)
     criterion = torch.nn.MSELoss().to(config.device) # important: use MSE loss because the output is a float number
     # criterion = BinaryDiceLoss().to(config.device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
 
     train_dataset = NcDataset(config, split='train')
     train_loader = DataLoader(train_dataset, batch_size=config.train_batch_size,
@@ -71,6 +71,12 @@ def main():
         plt.legend()
         plt.savefig(os.path.join(config.output_dir, '{}.png'.format(name)))
         plt.close()
+        # save model, first check if the model is the best
+        is_best = False
+        if not valid_records or valid_records[-1] < min(valid_records):
+            is_best = True
+        save_checkpoint(model, is_best, config.model_dir)
+
 
 if __name__ == '__main__':
     main()
