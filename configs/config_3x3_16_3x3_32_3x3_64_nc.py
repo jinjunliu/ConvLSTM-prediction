@@ -26,11 +26,13 @@ class Config:
         train_batch_size = 2
         valid_batch_size = 2 * train_batch_size
         test_batch_size = 2 * train_batch_size
-    data_file = 'datas/sst.mon.mean.nc'
-    var_name = 'sst'
+    # data_file = 'datas/sst.mon.mean.nc'
+    # var_name = 'sst'
+    data_file = 'datas/saved_aod_2023.nc'
+    var_name = 'aod'
 
-    num_frames_input = 12
-    num_frames_output = 12
+    num_frames_input = 6
+    num_frames_output = 6
     input_size = (64, 64)
     display = 1
     draw = 1

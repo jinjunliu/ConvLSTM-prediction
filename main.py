@@ -54,9 +54,9 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=config.test_batch_size,
                             num_workers=config.num_workers, shuffle=False, pin_memory=True)
     # print train loader size
-    for i, (inputs, targets) in enumerate(train_loader):
-        print(inputs.shape, targets.shape)
-        break
+    # for i, (inputs, targets) in enumerate(train_loader):
+    #     print(inputs.shape, targets.shape)
+    #     break
     train_records, valid_records, test_records = [], [], []
     for epoch in range(config.epochs):
         epoch_records = train(config, logger, epoch, model, train_loader, criterion, optimizer)
