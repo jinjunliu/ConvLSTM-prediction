@@ -78,8 +78,8 @@ class NcDataset(Dataset):
         inputs = inputs[..., np.newaxis]
         targets = targets[..., np.newaxis]
         # replace nan values with 0
-        # inputs = np.nan_to_num(inputs)
-        # targets = np.nan_to_num(targets)
+        inputs = np.nan_to_num(inputs)
+        targets = np.nan_to_num(targets)
         inputs = torch.from_numpy(inputs).permute(0, 3, 1, 2).float().contiguous()
         targets = torch.from_numpy(targets).permute(0, 3, 1, 2).float().contiguous()
         return inputs, targets
