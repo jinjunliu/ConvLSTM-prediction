@@ -2,6 +2,8 @@
 
 This is a simple example of how to use ConvLSTM to predict the next month of sea surface temperature (SST) based on a sequence of historical SSTs.
 
+This repo is modified from https://github.com/czifan/ConvLSTM.pytorch. The [submodule](https://github.com/ndrplz/ConvLSTM_pytorch/tree/9f662ba24b0a38e82cf0f5208c7f4859deb85ffe) is currently not used.
+
 ## Dataset
 
 Downlowd the dataset from https://downloads.psl.noaa.gov/Datasets/COBE/sst.mon.mean.nc and put it to the `datas` directory.
