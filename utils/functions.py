@@ -62,15 +62,17 @@ def test(config, logger, epoch, model, test_loader, criterion):
                 logger.info('[T] EP:{:03d}\tBI:{:05d}/{:05d}\tLoss:{:.6f}({:.6f})'.format(epoch, batch_idx, num_batchs,
                                                                                     epoch_records['loss'][-1], np.mean(epoch_records['loss'])))
             # if batch_idx and batch_idx % config.draw == 0:
-            if True: # always draw
+            # if True: # always draw
+            batch_size = inputs.shape[0]
+            for i in range(batch_size):
                 _, axarr = plt.subplots(3, targets.shape[1],
                                         figsize=(targets.shape[1] * 5, 15))
                 for t in range(targets.shape[1]):
                     # flip y axis
                     vmin, vmax = 0, 0.2
-                    axarr[0][t].imshow(np.flip(inputs[0, t, 0].detach().cpu().numpy(), axis=0), cmap='jet', vmin=vmin, vmax=vmax)
-                    axarr[1][t].imshow(np.flip(targets[0, t, 0].detach().cpu().numpy(), axis=0), cmap='jet', vmin=vmin, vmax=vmax)
-                    axarr[2][t].imshow(np.flip(outputs[0, t, 0].detach().cpu().numpy(), axis=0), cmap='jet', vmin=vmin, vmax=vmax)
-                plt.savefig(os.path.join(config.cache_dir, '{:03d}_{:05d}.png'.format(epoch, batch_idx)))
+                    axarr[0][t].imshow(np.flip(inputs[i, t, 0].detach().cpu().numpy(), axis=0), cmap='jet', vmin=vmin, vmax=vmax)
+                    axarr[1][t].imshow(np.flip(targets[i, t, 0].detach().cpu().numpy(), axis=0), cmap='jet', vmin=vmin, vmax=vmax)
+                    axarr[2][t].imshow(np.flip(outputs[i, t, 0].detach().cpu().numpy(), axis=0), cmap='jet', vmin=vmin, vmax=vmax)
+                plt.savefig(os.path.join(config.cache_dir, '{:03d}_{:05d}_{:05d}.png'.format(epoch, batch_idx, i)))
                 plt.close()
     return epoch_records
