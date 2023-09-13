@@ -28,7 +28,7 @@ class Config:
         test_batch_size = 2 * train_batch_size
     # data_file = 'datas/sst.mon.mean.nc'
     # var_name = 'sst'
-    data_file = 'datas/saved_aod_2023.nc'
+    data_file = 'datas/saved_aod_2023_interp.nc'
     var_name = 'aod'
 
     num_frames_input = 6
@@ -39,7 +39,7 @@ class Config:
     # train_dataset = (0, 1000)
     # valid_dataset = (1000, 1200)
     # test_dataset = (1200, 1590)
-    epochs = 10
+    epochs = 20
 
     # (type, activation, in_ch, out_ch, kernel_size, padding, stride)
     encoder = [('conv', 'leaky', 1, 16, 3, 1, 2),
