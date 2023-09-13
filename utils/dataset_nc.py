@@ -53,7 +53,7 @@ def split_data(data, split='train'):
         valid_data = data.values[9600:12000,:,:]
         return valid_data
     elif split == 'test':
-        test_data = data.values[12000:,:,:]
+        test_data = data.values[12000:13200,:,:]
         return test_data
     else:
         raise ValueError('Invalid split name: {}'.format(split))
