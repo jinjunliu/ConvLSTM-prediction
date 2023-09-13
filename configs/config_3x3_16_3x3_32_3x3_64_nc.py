@@ -18,7 +18,7 @@ class Config:
         # train_batch_size = 64
         # valid_batch_size = 2 * train_batch_size
         # test_batch_size = 2 * train_batch_size
-        train_batch_size = 16
+        train_batch_size = 10
         valid_batch_size = 2*train_batch_size
         test_batch_size = 2*train_batch_size
     else:
