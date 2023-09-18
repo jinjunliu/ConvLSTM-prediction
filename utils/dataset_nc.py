@@ -14,10 +14,6 @@ def load_nc_data(config):
     var_name = config.var_name
     with xr.open_dataset(data_file) as data:
         data = data[var_name]
-#    # reverse the latitude dimension to make it increasing
-#    data = data.reindex(lat=list(reversed(data.lat)))
-#    # select the region of interest, this will generate a dataset with shape (1590, 64, 64)
-#    data = data.sel(lon=slice(296, 360), lat=slice(0, 64))
     return data
 
 
@@ -34,18 +30,6 @@ def split_data(data, split='train'):
         valid_data: a numpy array of shape (10*12, 64, 64) = (120, 64, 64) # 10 years
         test_data: a numpy array of shape (5*12, 64, 64) = (60, 64, 64) # 5 years
     """
-#    ds = xr.open_dataset('./saved_aod_20230101.nc')
-#    ds_aod= ds.variables['aod']
-#    train_data = data.values[:600,:,:]
-#    valid_data = data.values[600:720,:,:]
-#    test_data = data.values[720:780,:,:]
-
-#    train_data = data.sel(time=slice("1950-01-01",
-#                                        "1999-12-31")).values
-#    valid_data = data.sel(time=slice("2000-01-01",
-#                                        "2010-12-31")).values
-#    test_data = data.sel(time=slice("2011-01-01",
-#                                        "2015-12-31")).values
     if split == 'train':
         train_data = data.values[:9600,:,:]
         return train_data
