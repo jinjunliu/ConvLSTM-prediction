@@ -17,16 +17,28 @@ def interp_nan():
     for i in range(ntime):
         print("processing time step: ", i)
         aod_i = aod[i,:,:]
-        # mask invalid values
-        array = np.ma.masked_invalid(aod_i)
-        xx1 = xx[~array.mask]
-        yy1 = yy[~array.mask]
-        newarr = array[~array.mask]
+        # if no nan values, skip
+        if not np.isnan(aod_i).any():
+            continue
+        max_interp_time = 16
+        # loop until all nan values are interpolated or max_interp_time is reached
+        while np.isnan(aod_i).any() and max_interp_time > 0:
+            # mask invalid values
+            array = np.ma.masked_invalid(aod_i)
+            xx1 = xx[~array.mask]
+            yy1 = yy[~array.mask]
+            newarr = array[~array.mask]
 
-        GD1 = griddata((xx1, yy1), newarr.ravel(),
-                       (xx, yy),
-                       method='nearest')
-        aod[i,:,:] = GD1
+            aod_i = griddata((xx1, yy1), newarr.ravel(),
+                        (xx, yy),
+                        method='cubic')
+            max_interp_time -= 1
+        # if there are still nan values, use nearest neighbor interpolation
+        if np.isnan(aod_i).any():
+            aod_i = griddata((xx1, yy1), newarr.ravel(),
+                        (xx, yy),
+                        method='nearest')
+        aod[i,:,:] = aod_i
     return aod
 
 
@@ -34,4 +46,4 @@ if __name__ == "__main__":
     aod = interp_nan()
     ds = xr.open_dataset('./saved_aod_2023.nc')
     ds['aod'] = (('time', 'y', 'x'), aod)
-    ds.to_netcdf('./saved_aod_2023_interp.nc')
+    ds.to_netcdf('./saved_aod_2023_interp_cubic.nc')
