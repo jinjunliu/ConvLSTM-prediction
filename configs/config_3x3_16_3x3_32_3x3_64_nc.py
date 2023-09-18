@@ -28,7 +28,7 @@ class Config:
         test_batch_size = 2 * train_batch_size
     # data_file = 'datas/sst.mon.mean.nc'
     # var_name = 'sst'
-    data_file = 'datas/saved_aod_2023_interp.nc'
+    data_file = 'datas/saved_aod_2023_interp_cubic.nc'
     var_name = 'aod'
 
     num_frames_input = 6
